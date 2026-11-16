@@ -1,10 +1,15 @@
 
 package ie.dbs.gymtrainingmanagement.Login;
 
+import ie.dbs.gymtrainingmanagement.Role.Role;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "logins")
+@Getter
+@Setter
 public class Login {
 
     @Id
@@ -17,59 +22,20 @@ public class Login {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "role_id", nullable = false)
-    private int roleId;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "roleId", nullable = false)
+    private Role role;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
 
-    // Construtor obrigatório para o JPA
     public Login() {
     }
 
-    // Construtor personalizado
-    public Login(String userName, String password,
-                 int roleId, boolean isActive) {
+    public Login(String userName, String password, Role role, boolean isActive) {
         this.userName = userName;
         this.password = password;
-        this.roleId = roleId;
+        this.role = role;
         this.isActive = isActive;
-    }
-
-    // Getters e Setters
-    public int getId() {
-        return id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
     }
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Login</title>
+</head>
+<body>
+<h1>Create Login</h1>
+
+<form th:action="@{/logins}" th:object="${loginForm}" method="post">
+
+    <div>
+        <label for="userName">User Name</label>
+        <input id="userName" type="text" th:field="*{userName}">
+        <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></div>
+    </div>
+
+    <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" th:field="*{password}">
+        <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+    </div>
+
+    <div>
+        <label for="roleId">Role Id</label>
+        <select id="roleId" th:field="*{roleId}">
+            <option value="">Select Role</option>
+            <option th:each="role : ${roles}"
+                    th:value="${role.id}"
+                    th:text="${role.description}">
+            </option>
+        </select>
+        <div th:if="${#fields.hasErrors('roleId')}" th:errors="*{roleId}"></div>
+    </div>
+
+    <div>
+        <label for="active">Is Active</label>
+        <select id="active" th:field="*{active}">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+        <div th:if="${#fields.hasErrors('active')}"
+             th:errors="*{active}"></div>
+    </div>
+
+    <button type="submit">Save</button>
+</form>
+
+<p><a th:href="@{/logins}">Back to Logins</a></p>
+</body>
+</html>
