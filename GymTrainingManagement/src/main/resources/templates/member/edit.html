@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Edit Member')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('members')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Edit Member</h1>
+
+    <form th:action="@{/members/{id}(id=${memberId})}" th:object="${memberForm}" method="post">
+
+        <div class="mb-3">
+            <label for="fullName" class="form-label">Full Name</label>
+            <input id="fullName" type="text" class="form-control" th:field="*{fullName}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{fullName}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-7 mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input id="email" type="email" class="form-control" th:field="*{email}"
+                       th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{email}"></div>
+            </div>
+            <div class="col-md-5 mb-3">
+                <label for="phone" class="form-label">Phone</label>
+                <input id="phone" type="text" class="form-control" th:field="*{phone}"
+                       th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{phone}"></div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="birthDate" class="form-label">Birth Date</label>
+            <input id="birthDate" type="date" class="form-control" th:field="*{birthDate}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{birthDate}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="gymId" class="form-label">Gym</label>
+            <select id="gymId" class="form-select" th:field="*{gymId}" th:errorclass="is-invalid">
+                <option value="">Select Gym</option>
+                <option th:each="gym : ${gyms}"
+                        th:value="${gym.id}"
+                        th:text="${gym.name}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{gymId}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="loginId" class="form-label">Login</label>
+            <select id="loginId" class="form-select" th:field="*{loginId}" th:errorclass="is-invalid">
+                <option value="">No login</option>
+                <option th:each="login : ${logins}"
+                        th:value="${login.id}"
+                        th:text="${login.userName + ' (' + login.role.description + ')'}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{loginId}"></div>
+            <div class="form-text">Optional. Only logins not linked to another member are listed.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="active" class="form-label">Is Active</label>
+            <select id="active" class="form-select" th:field="*{active}" th:errorclass="is-invalid">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{active}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-link" th:href="@{/members}">Back to Members</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

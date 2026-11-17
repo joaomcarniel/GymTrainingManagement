@@ -5,6 +5,8 @@
 <nav th:replace="~{fragments/layout :: navbar('gyms')}"></nav>
 
 <main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="h3 mb-0">Gyms</h1>
         <a class="btn btn-primary" th:href="@{/gyms/new}">Add New Gym</a>

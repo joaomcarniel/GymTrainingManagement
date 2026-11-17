@@ -1,6 +1,8 @@
 package ie.dbs.gymtrainingmanagement.Gym;
 
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -67,13 +69,19 @@ public class GymController {
             return "gym/edit";
         }
 
+        // If the gym no longer exists the service returns null, and we simply go back to the list.
         gymService.updateGym(id, gymForm);
         return "redirect:/gyms";
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteGym(@PathVariable Long id) {
-        gymService.deleteGym(id);
+    public String deleteGym(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            gymService.deleteGym(id);
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("error",
+                    "This gym cannot be deleted because it still has members or equipment linked to it.");
+        }
         return "redirect:/gyms";
     }
 }

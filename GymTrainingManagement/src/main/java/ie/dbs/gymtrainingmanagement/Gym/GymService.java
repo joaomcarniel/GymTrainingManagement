@@ -48,6 +48,9 @@ public class GymService {
     public boolean deleteGym(Long id) {
         if (!gymRepository.existsById(id)) return false;
         gymRepository.deleteById(id);
+        // Forces the delete now, so a foreign key error (gym still has members or equipment)
+        // is thrown here and the controller can show a message.
+        gymRepository.flush();
         return true;
     }
 

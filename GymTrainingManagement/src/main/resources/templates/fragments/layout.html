@@ -36,10 +36,18 @@
                        th:href="@{/gyms}">Gyms</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:classappend="${active == 'equipments'} ? 'active'"
-                       th:href="@{/equipments}">Equipment</a>
+                    <a class="nav-link" th:classappend="${active == 'equipment'} ? 'active'"
+                       th:href="@{/equipment}">Equipment</a>
                 </li>
-                <!-- Add the next ones when their CRUDs exist: Members, Exercises, Workouts -->
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active == 'gymequipment'} ? 'active'"
+                       th:href="@{/gym-equipment}">Gym Equipment</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active == 'members'} ? 'active'"
+                       th:href="@{/members}">Members</a>
+                </li>
+                <!-- Add the next ones when their CRUDs exist: Exercises, Workouts -->
                 <li class="nav-item">
                     <a class="nav-link" th:classappend="${active == 'logins'} ? 'active'"
                        th:href="@{/logins}">Logins</a>
@@ -48,6 +56,18 @@
         </div>
     </div>
 </nav>
+
+<!-- Messages sent by controllers with redirectAttributes.addFlashAttribute("error" / "success", ...) -->
+<div th:fragment="flash">
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
 
 <script th:fragment="scripts"
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Edit Gym Equipment')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('gymequipment')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Edit Gym Equipment</h1>
+
+    <form th:action="@{/gym-equipment/{id}(id=${gymEquipmentId})}" th:object="${gymEquipmentForm}"
+          method="post">
+
+        <!-- Gym and equipment cannot change here. The hidden fields only keep the form valid,
+             the service ignores them on update. -->
+        <input type="hidden" th:field="*{gymId}">
+        <input type="hidden" th:field="*{equipmentId}">
+
+        <div class="mb-3">
+            <label for="gymName" class="form-label">Gym</label>
+            <input id="gymName" type="text" class="form-control" th:value="${gymName}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label for="equipmentName" class="form-label">Equipment</label>
+            <input id="equipmentName" type="text" class="form-control" th:value="${equipmentName}" readonly>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input id="quantity" type="number" min="1" max="999" class="form-control"
+                       th:field="*{quantity}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{quantity}"></div>
+            </div>
+            <div class="col-md-8 mb-3">
+                <label for="condition" class="form-label">Condition</label>
+                <select id="condition" class="form-select" th:field="*{condition}" th:errorclass="is-invalid">
+                    <option value="">Select Condition</option>
+                    <option th:each="c : ${conditions}"
+                            th:value="${c.name()}"
+                            th:text="${c.label}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{condition}"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-link" th:href="@{/gym-equipment}">Back to Gym Equipment</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

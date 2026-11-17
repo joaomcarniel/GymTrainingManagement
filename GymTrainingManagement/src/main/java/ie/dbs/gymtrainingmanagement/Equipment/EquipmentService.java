@@ -19,36 +19,37 @@ public class EquipmentService {
     }
 
     @Transactional
-    public Equipment CreateEquipment(EquipmentForm form) {
+    public Equipment createEquipment(EquipmentForm form) {
+        // Throws InvalidImageException before anything is saved if the file is not valid.
         String imagePath = imageStorageService.Store(form.getImage());
 
         Equipment equipment = new Equipment(
                 form.getName().trim(),
-                BlankToNull(form.getDescription()),
+                blankToNull(form.getDescription()),
                 form.getMuscleGroup(),
                 imagePath);
         return equipmentRepository.save(equipment);
     }
 
     @Transactional(readOnly = true)
-    public List<Equipment> GetEquipment() {
+    public List<Equipment> getEquipment() {
         return equipmentRepository.findAll(Sort.by("name"));
     }
 
     @Transactional(readOnly = true)
-    public Equipment GetEquipmentById(Long id) {
+    public Equipment getEquipmentById(Long id) {
         return equipmentRepository.findById(id).orElse(null);
     }
 
     @Transactional
-    public Equipment UpdateEquipment(Long id, EquipmentForm form) {
+    public Equipment updateEquipment(Long id, EquipmentForm form) {
         Equipment equipment = equipmentRepository.findById(id).orElse(null);
         if (equipment == null) return null;
 
         String newImage = imageStorageService.Store(form.getImage());
 
         equipment.setName(form.getName().trim());
-        equipment.setDescription(BlankToNull(form.getDescription()));
+        equipment.setDescription(blankToNull(form.getDescription()));
         equipment.setMuscleGroup(form.getMuscleGroup());
 
         if (newImage != null) {
@@ -59,16 +60,19 @@ public class EquipmentService {
     }
 
     @Transactional
-    public boolean DeleteEquipment(Long id) {
+    public boolean deleteEquipment(Long id) {
         Equipment equipment = equipmentRepository.findById(id).orElse(null);
         if (equipment == null) return false;
 
         equipmentRepository.delete(equipment);
+        // Forces the delete now: if the equipment is still used by a gym, the exception happens here,
+        // before the image file is removed.
+        equipmentRepository.flush();
         imageStorageService.Delete(equipment.getImagePath());
         return true;
     }
 
-    private String BlankToNull(String value) {
+    private String blankToNull(String value) {
         return value == null || value.isBlank() ? null : value.trim();
     }
 }

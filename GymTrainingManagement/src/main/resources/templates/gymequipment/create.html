@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Add Equipment to Gym')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('gymequipment')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Add Equipment to a Gym</h1>
+
+    <form th:action="@{/gym-equipment}" th:object="${gymEquipmentForm}" method="post">
+
+        <div class="mb-3">
+            <label for="gymId" class="form-label">Gym</label>
+            <select id="gymId" class="form-select" th:field="*{gymId}" th:errorclass="is-invalid">
+                <option value="">Select Gym</option>
+                <option th:each="gym : ${gyms}"
+                        th:value="${gym.id}"
+                        th:text="${gym.name}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{gymId}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="equipmentId" class="form-label">Equipment</label>
+            <select id="equipmentId" class="form-select" th:field="*{equipmentId}" th:errorclass="is-invalid">
+                <option value="">Select Equipment</option>
+                <option th:each="equipment : ${equipmentList}"
+                        th:value="${equipment.id}"
+                        th:text="${equipment.name + ' (' + equipment.muscleGroup.label + ')'}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{equipmentId}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input id="quantity" type="number" min="1" max="999" class="form-control"
+                       th:field="*{quantity}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{quantity}"></div>
+            </div>
+            <div class="col-md-8 mb-3">
+                <label for="condition" class="form-label">Condition</label>
+                <select id="condition" class="form-select" th:field="*{condition}" th:errorclass="is-invalid">
+                    <option value="">Select Condition</option>
+                    <option th:each="c : ${conditions}"
+                            th:value="${c.name()}"
+                            th:text="${c.label}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{condition}"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-link" th:href="@{/gym-equipment}">Back to Gym Equipment</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

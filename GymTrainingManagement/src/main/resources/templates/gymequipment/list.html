@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gym Equipment')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('gymequipment')}"></nav>
+
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Gym Equipment</h1>
+        <a class="btn btn-primary"
+           th:href="${selectedGymId != null} ? @{/gym-equipment/new(gymId=${selectedGymId})} : @{/gym-equipment/new}">
+            Add Equipment to a Gym</a>
+    </div>
+
+    <form th:action="@{/gym-equipment}" method="get" class="row g-2 align-items-center mb-3">
+        <div class="col-auto">
+            <label for="gymFilter" class="col-form-label">Gym</label>
+        </div>
+        <div class="col-auto">
+            <select id="gymFilter" name="gymId" class="form-select" onchange="this.form.submit()">
+                <option value="">All gyms</option>
+                <option th:each="gym : ${gyms}"
+                        th:value="${gym.id}"
+                        th:text="${gym.name}"
+                        th:selected="${gym.id == selectedGymId}"></option>
+            </select>
+        </div>
+        <noscript>
+            <div class="col-auto"><button type="submit" class="btn btn-outline-secondary">Filter</button></div>
+        </noscript>
+    </form>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+        <tr>
+            <th>Gym</th>
+            <th>Equipment</th>
+            <th>Quantity</th>
+            <th>Condition</th>
+            <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${gymEquipmentList}">
+            <td th:text="${item.gym.name}"></td>
+            <td>
+                <div class="d-flex align-items-center gap-2">
+                    <img th:if="${item.equipment.imagePath != null}"
+                         th:src="@{/uploads/{file}(file=${item.equipment.imagePath})}"
+                         th:alt="${item.equipment.name}"
+                         class="rounded"
+                         style="width: 40px; height: 40px; object-fit: cover;">
+                    <span th:text="${item.equipment.name}"></span>
+                </div>
+            </td>
+            <td th:text="${item.quantity}"></td>
+            <td>
+                <span class="badge"
+                      th:classappend="${item.condition.badgeClass}"
+                      th:text="${item.condition.label}"></span>
+            </td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/gym-equipment/{id}/edit(id=${item.id})}">Edit</a>
+                <form th:action="@{/gym-equipment/{id}/delete(id=${item.id})}" method="post"
+                      class="d-inline"
+                      onsubmit="return confirm('Remove this equipment from the gym?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(gymEquipmentList)}">
+            <td colspan="5" class="text-center text-muted">No equipment found for this selection.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

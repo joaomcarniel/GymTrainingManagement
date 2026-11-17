@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Members')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('members')}"></nav>
+
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Members</h1>
+        <a class="btn btn-primary" th:href="@{/members/new}">Add New Member</a>
+    </div>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Gym</th>
+            <th>Login</th>
+            <th>Registered</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="member : ${members}">
+            <td th:text="${member.fullName}"></td>
+            <td th:text="${member.email}"></td>
+            <td th:text="${#strings.isEmpty(member.phone) ? '-' : member.phone}"></td>
+            <td th:text="${member.gym.name}"></td>
+            <td th:text="${member.login != null ? member.login.userName : '-'}"></td>
+            <td th:text="${#temporals.format(member.registrationDate, 'dd/MM/yyyy')}"></td>
+            <td>
+                <span class="badge"
+                      th:classappend="${member.active} ? 'text-bg-success' : 'text-bg-secondary'"
+                      th:text="${member.active} ? 'Active' : 'Inactive'"></span>
+            </td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/members/{id}/edit(id=${member.id})}">Edit</a>
+                <form th:action="@{/members/{id}/delete(id=${member.id})}" method="post"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete this member?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(members)}">
+            <td colspan="8" class="text-center text-muted">No members found. Add your first member.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>
