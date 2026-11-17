@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Edit Login')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('logins')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Edit Login</h1>
+
+    <form th:action="@{/logins/{id}(id=${loginId})}" th:object="${loginForm}" method="post">
+
+        <div class="mb-3">
+            <label for="userName" class="form-label">User Name</label>
+            <input id="userName" type="text" class="form-control" th:field="*{userName}" readonly>
+            <div class="invalid-feedback" th:errors="*{userName}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control" th:field="*{password}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{password}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="roleId" class="form-label">Role</label>
+            <select id="roleId" class="form-select" th:field="*{roleId}"
+                    th:errorclass="is-invalid">
+                <option value="">Select Role</option>
+                <option th:each="role : ${roles}"
+                        th:value="${role.id}"
+                        th:text="${role.description}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{roleId}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="active" class="form-label">Is Active</label>
+            <select id="active" class="form-select" th:field="*{active}"
+                    th:errorclass="is-invalid">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{active}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-link" th:href="@{/logins}">Back to Logins</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

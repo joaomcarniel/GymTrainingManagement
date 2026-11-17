@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Edit Equipment')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('equipment')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Edit Equipment</h1>
+
+    <form th:action="@{/equipments/{id}(id=${equipmentId})}" th:object="${equipmentForm}"
+          method="post" enctype="multipart/form-data">
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" class="form-control" th:field="*{name}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="muscleGroup" class="form-label">Muscle Group</label>
+            <select id="muscleGroup" class="form-select" th:field="*{muscleGroup}"
+                    th:errorclass="is-invalid">
+                <option value="">Select Muscle Group</option>
+                <option th:each="group : ${muscleGroups}"
+                        th:value="${group.name()}"
+                        th:text="${group.label}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{muscleGroup}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" rows="3" class="form-control" th:field="*{description}"
+                      th:errorclass="is-invalid"></textarea>
+            <div class="invalid-feedback" th:errors="*{description}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label d-block">Current Image</label>
+            <img th:if="${currentImage != null}"
+                 th:src="@{/uploads/{file}(file=${currentImage})}"
+                 alt="Current image"
+                 class="rounded border mb-2"
+                 style="max-width: 200px; max-height: 200px; object-fit: cover;">
+            <p th:unless="${currentImage != null}" class="text-muted">No image uploaded yet.</p>
+
+            <label for="image" class="form-label d-block">Upload a New Image (replaces the current one)</label>
+            <input id="image" type="file" name="image" class="form-control"
+                   accept="image/png,image/jpeg,image/webp"
+                   th:classappend="${#fields.hasErrors('image')} ? 'is-invalid'">
+            <div class="invalid-feedback" th:errors="*{image}"></div>
+            <div class="form-text">JPG, PNG or WEBP, up to 5 MB. Leave empty to keep the current image.</div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-link" th:href="@{/equipments}">Back to Equipment</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

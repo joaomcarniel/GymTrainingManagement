@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Equipment')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('equipments')}"></nav>
+
+<main class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Equipment</h1>
+        <a class="btn btn-primary" th:href="@{/equipments/new}">Add New Equipment</a>
+    </div>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+        <tr>
+            <th style="width: 90px;">Image</th>
+            <th>Name</th>
+            <th>Muscle Group</th>
+            <th>Description</th>
+            <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${equipmentList}">
+            <td>
+                <img th:if="${item.imagePath != null}"
+                     th:src="@{/uploads/{file}(file=${item.imagePath})}"
+                     th:alt="${item.name}"
+                     class="rounded"
+                     style="width: 64px; height: 64px; object-fit: cover;">
+                <div th:unless="${item.imagePath != null}"
+                     class="bg-light border rounded d-flex align-items-center justify-content-center text-muted small"
+                     style="width: 64px; height: 64px;">No image</div>
+            </td>
+            <td th:text="${item.name}"></td>
+            <td th:text="${item.muscleGroup.label}"></td>
+            <td th:text="${#strings.isEmpty(item.description) ? '-' : #strings.abbreviate(item.description, 80)}"></td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/equipments/{id}/edit(id=${item.id})}">Edit</a>
+                <form th:action="@{/equipments/{id}/delete(id=${item.id})}" method="post"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete this equipment?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(equipmentList)}">
+            <td colspan="5" class="text-center text-muted">No equipment found. Add your first equipment.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

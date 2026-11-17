@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Create Gym')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('gyms')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Create Gym</h1>
+
+    <form th:action="@{/gyms}" th:object="${gymForm}" method="post">
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Gym Name</label>
+            <input id="name" type="text" class="form-control" th:field="*{name}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone</label>
+            <input id="phone" type="text" class="form-control" th:field="*{phone}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{phone}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="street" class="form-label">Street</label>
+            <input id="street" type="text" class="form-control" th:field="*{street}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{street}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-5 mb-3">
+                <label for="city" class="form-label">City</label>
+                <input id="city" type="text" class="form-control" th:field="*{city}"
+                       th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{city}"></div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="county" class="form-label">County</label>
+                <input id="county" type="text" class="form-control" th:field="*{county}"
+                       th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{county}"></div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <label for="eircode" class="form-label">Eircode</label>
+                <input id="eircode" type="text" class="form-control" th:field="*{eircode}"
+                       th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{eircode}"></div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-link" th:href="@{/gyms}">Back to Gyms</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>
