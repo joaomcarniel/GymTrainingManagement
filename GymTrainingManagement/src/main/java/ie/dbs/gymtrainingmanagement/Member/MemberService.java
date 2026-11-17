@@ -86,6 +86,9 @@ public class MemberService {
     public boolean deleteMember(Long id) {
         if (!memberRepository.existsById(id)) return false;
         memberRepository.deleteById(id);
+        // Forces the delete now, so a foreign key error (member still has workout plans)
+        // is thrown here and the controller can show a message.
+        memberRepository.flush();
         return true;
     }
 

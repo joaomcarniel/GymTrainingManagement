@@ -47,7 +47,14 @@
                     <a class="nav-link" th:classappend="${active == 'members'} ? 'active'"
                        th:href="@{/members}">Members</a>
                 </li>
-                <!-- Add the next ones when their CRUDs exist: Exercises, Workouts -->
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active == 'exercises'} ? 'active'"
+                       th:href="@{/exercises}">Exercises</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:classappend="${active == 'workoutplans'} ? 'active'"
+                       th:href="@{/workout-plans}">Workout Plans</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" th:classappend="${active == 'logins'} ? 'active'"
                        th:href="@{/logins}">Logins</a>

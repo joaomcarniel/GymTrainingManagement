@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Workout Plans')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('workoutplans')}"></nav>
+
+<main class="container">
+    <div th:replace="~{fragments/layout :: flash}"></div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Workout Plans</h1>
+        <a class="btn btn-primary"
+           th:href="${selectedMemberId != null} ? @{/workout-plans/new(memberId=${selectedMemberId})} : @{/workout-plans/new}">
+            Add New Plan</a>
+    </div>
+
+    <form th:action="@{/workout-plans}" method="get" class="row g-2 align-items-center mb-3">
+        <div class="col-auto">
+            <label for="memberFilter" class="col-form-label">Member</label>
+        </div>
+        <div class="col-auto">
+            <select id="memberFilter" name="memberId" class="form-select" onchange="this.form.submit()">
+                <option value="">All members</option>
+                <option th:each="member : ${members}"
+                        th:value="${member.id}"
+                        th:text="${member.fullName}"
+                        th:selected="${member.id == selectedMemberId}"></option>
+            </select>
+        </div>
+        <noscript>
+            <div class="col-auto"><button type="submit" class="btn btn-outline-secondary">Filter</button></div>
+        </noscript>
+    </form>
+
+    <table class="table table-striped table-hover align-middle">
+        <thead>
+        <tr>
+            <th>Plan</th>
+            <th>Member</th>
+            <th>Start Date</th>
+            <th>Status</th>
+            <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="plan : ${workoutPlans}">
+            <td>
+                <a th:href="@{/workout-plans/{id}(id=${plan.id})}" th:text="${plan.name}"></a>
+            </td>
+            <td th:text="${plan.member.fullName}"></td>
+            <td th:text="${#temporals.format(plan.startDate, 'dd/MM/yyyy')}"></td>
+            <td>
+                <span class="badge"
+                      th:classappend="${plan.active} ? 'text-bg-success' : 'text-bg-secondary'"
+                      th:text="${plan.active} ? 'Active' : 'Inactive'"></span>
+            </td>
+            <td class="text-end">
+                <a class="btn btn-sm btn-outline-primary"
+                   th:href="@{/workout-plans/{id}(id=${plan.id})}">Open</a>
+                <a class="btn btn-sm btn-outline-secondary"
+                   th:href="@{/workout-plans/{id}/edit(id=${plan.id})}">Edit</a>
+                <form th:action="@{/workout-plans/{id}/delete(id=${plan.id})}" method="post"
+                      class="d-inline"
+                      onsubmit="return confirm('Delete this plan and all its exercises?');">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(workoutPlans)}">
+            <td colspan="5" class="text-center text-muted">No workout plans found for this selection.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

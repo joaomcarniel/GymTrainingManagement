@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Add Exercise to Plan')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('workoutplans')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-1">Add Exercise</h1>
+    <p class="text-muted mb-4">
+        <span th:text="${workoutPlan.name}"></span> &middot; <span th:text="${workoutPlan.member.fullName}"></span>
+    </p>
+
+    <form th:action="@{/workout-plans/{planId}/items(planId=${workoutPlan.id})}"
+          th:object="${workoutPlanItemForm}" method="post">
+
+        <div class="mb-3">
+            <label for="exerciseId" class="form-label">Exercise</label>
+            <select id="exerciseId" class="form-select" th:field="*{exerciseId}" th:errorclass="is-invalid">
+                <option value="">Select Exercise</option>
+                <option th:each="exercise : ${exercises}"
+                        th:value="${exercise.id}"
+                        th:text="${exercise.name + ' (' + exercise.muscleGroup.label + ')'}"></option>
+            </select>
+            <div class="invalid-feedback" th:errors="*{exerciseId}"></div>
+            <div class="form-text">
+                Not in the list? <a th:href="@{/exercises/new}" target="_blank">Create the exercise</a> and reload this page.
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6 col-md-3 mb-3">
+                <label for="sets" class="form-label">Sets</label>
+                <input id="sets" type="number" min="1" max="20" class="form-control"
+                       th:field="*{sets}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{sets}"></div>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <label for="reps" class="form-label">Reps</label>
+                <input id="reps" type="number" min="1" max="100" class="form-control"
+                       th:field="*{reps}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{reps}"></div>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <label for="weightKg" class="form-label">Weight (kg)</label>
+                <input id="weightKg" type="number" min="0" step="0.5" class="form-control"
+                       th:field="*{weightKg}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{weightKg}"></div>
+            </div>
+            <div class="col-6 col-md-3 mb-3">
+                <label for="restSeconds" class="form-label">Rest (s)</label>
+                <input id="restSeconds" type="number" min="0" max="1200" step="5" class="form-control"
+                       th:field="*{restSeconds}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{restSeconds}"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mb-3">
+                <label for="dayLabel" class="form-label">Day</label>
+                <input id="dayLabel" type="text" class="form-control" th:field="*{dayLabel}"
+                       th:errorclass="is-invalid" placeholder="Day A, Monday...">
+                <div class="invalid-feedback" th:errors="*{dayLabel}"></div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label for="orderIndex" class="form-label">Order</label>
+                <input id="orderIndex" type="number" min="1" class="form-control"
+                       th:field="*{orderIndex}" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{orderIndex}"></div>
+                <div class="form-text">Empty = at the end.</div>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a class="btn btn-link" th:href="@{/workout-plans/{id}(id=${workoutPlan.id})}">Back to Plan</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

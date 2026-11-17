@@ -94,7 +94,7 @@ public class EquipmentController {
             equipmentService.deleteEquipment(id);
         } catch (DataIntegrityViolationException e) {
             redirectAttributes.addFlashAttribute("error",
-                    "This equipment cannot be deleted because it is still assigned to a gym.");
+                    "This equipment cannot be deleted because it is still assigned to a gym or used by an exercise.");
         }
         return "redirect:/equipment";
     }

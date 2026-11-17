@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Edit Exercise')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar('exercises')}"></nav>
+
+<main class="container" style="max-width: 640px;">
+    <h1 class="h3 mb-4">Edit Exercise</h1>
+
+    <form th:action="@{/exercises/{id}(id=${exerciseId})}" th:object="${exerciseForm}" method="post">
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input id="name" type="text" class="form-control" th:field="*{name}"
+                   th:errorclass="is-invalid">
+            <div class="invalid-feedback" th:errors="*{name}"></div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="muscleGroup" class="form-label">Muscle Group</label>
+                <select id="muscleGroup" class="form-select" th:field="*{muscleGroup}"
+                        th:errorclass="is-invalid">
+                    <option value="">Select Muscle Group</option>
+                    <option th:each="group : ${muscleGroups}"
+                            th:value="${group.name()}"
+                            th:text="${group.label}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{muscleGroup}"></div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="equipmentId" class="form-label">Equipment</label>
+                <select id="equipmentId" class="form-select" th:field="*{equipmentId}"
+                        th:errorclass="is-invalid">
+                    <option value="">None (bodyweight)</option>
+                    <option th:each="equipment : ${equipmentList}"
+                            th:value="${equipment.id}"
+                            th:text="${equipment.name}"></option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{equipmentId}"></div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea id="description" rows="3" class="form-control" th:field="*{description}"
+                      th:errorclass="is-invalid"></textarea>
+            <div class="invalid-feedback" th:errors="*{description}"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-link" th:href="@{/exercises}">Back to Exercises</a>
+    </form>
+</main>
+
+<script th:replace="~{fragments/layout :: scripts}"></script>
+</body>
+</html>

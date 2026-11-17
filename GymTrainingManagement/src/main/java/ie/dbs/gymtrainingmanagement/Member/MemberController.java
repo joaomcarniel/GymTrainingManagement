@@ -3,6 +3,8 @@ package ie.dbs.gymtrainingmanagement.Member;
 import ie.dbs.gymtrainingmanagement.Common.FieldValidationException;
 import ie.dbs.gymtrainingmanagement.Gym.GymService;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -91,8 +93,13 @@ public class MemberController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deleteMember(@PathVariable Long id) {
-        memberService.deleteMember(id);
+    public String deleteMember(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        try {
+            memberService.deleteMember(id);
+        } catch (DataIntegrityViolationException e) {
+            redirectAttributes.addFlashAttribute("error",
+                    "This member cannot be deleted because they still have workout plans. Delete the plans first.");
+        }
         return "redirect:/members";
     }
 

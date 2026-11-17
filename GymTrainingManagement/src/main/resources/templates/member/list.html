@@ -41,6 +41,8 @@
             <td class="text-end">
                 <a class="btn btn-sm btn-outline-secondary"
                    th:href="@{/members/{id}/edit(id=${member.id})}">Edit</a>
+                <a class="btn btn-sm btn-outline-primary"
+                   th:href="@{/workout-plans(memberId=${member.id})}">Plans</a>
                 <form th:action="@{/members/{id}/delete(id=${member.id})}" method="post"
                       class="d-inline"
                       onsubmit="return confirm('Delete this member?');">
